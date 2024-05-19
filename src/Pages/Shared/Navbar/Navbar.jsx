@@ -1,7 +1,17 @@
 import { Link } from 'react-router-dom';
-import logo from'../../../assets/assets/icon/151-1511569_cart-notifications-free-shopping-cart-favicon-hd-png-removebg-preview.png'
+
+import { AuthContext } from '../../../Provider/AuthProvider';
+import { useContext } from 'react';
+import { FaCartShopping } from "react-icons/fa6";
 
 const Navbar = () => {
+
+  const {user, logOut}= useContext(AuthContext)
+  const handleLogOut = ()=>{
+    logOut()
+    .then()
+    .catch()
+  }
     const navOption = <>
        <li><Link to='/'>Home</Link></li>
        
@@ -10,12 +20,28 @@ const Navbar = () => {
        <li><a>DeshBoard</a></li>
        <li><Link to='/menu'>Our Menu</Link></li>
        <li><Link to='/order/salad'>Our Shop</Link></li>
-       <img className='w-[40px] h-[40px]' src={logo} alt="" />
 
-       <button className='mx-[10px]'>Sign Out</button>
-       <div className="w-10 rounded-full">
-          <img alt="Tailwind  CSS Navbar component" className='rounded-full' src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-        </div>
+       <li><Link>
+       <button className="btn">
+       <FaCartShopping className='text-2xl' />
+       <div className="">+0</div>
+       </button>
+       
+       </Link></li>
+       {/* <img className='w-[40px] h-[40px]' src={logo} alt="" /> */}
+
+      {
+        user ? <>
+               <button onClick={handleLogOut} className='mx-[10px]'>LogOut</button>
+               <div title={user.displayName} className="w-10 rounded-full">
+               <img alt="Tailwind  CSS Navbar component" className='rounded-full' src={user.photoURl} />
+            </div>
+        </> :<>
+         <Link to='/login'>   <button className='mx-[10px]'>Login</button></Link>
+       
+        
+        </>
+      }
     
     </>
     return (
