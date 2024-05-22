@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../Provider/AuthProvider';
 import { useContext } from 'react';
 import { FaCartShopping } from "react-icons/fa6";
+import useCart from '../../../hooks/useCart';
 
 const Navbar = () => {
 
-  const {user, logOut}= useContext(AuthContext)
+  const {user, logOut}= useContext(AuthContext);
+  const [cart]= useCart();
+  console.log(cart);
   const handleLogOut = ()=>{
     logOut()
     .then()
@@ -21,10 +24,10 @@ const Navbar = () => {
        <li><Link to='/menu'>Our Menu</Link></li>
        <li><Link to='/order/salad'>Our Shop</Link></li>
 
-       <li><Link>
+       <li><Link to='/desboard/cart'>
        <button className="btn">
        <FaCartShopping className='text-2xl' />
-       <div className="">+0</div>
+       <div className="">+{cart.length}</div>
        </button>
        
        </Link></li>
@@ -34,7 +37,7 @@ const Navbar = () => {
         user ? <>
                <button onClick={handleLogOut} className='mx-[10px]'>LogOut</button>
                <div title={user.displayName} className="w-10 rounded-full">
-               <img alt="Tailwind  CSS Navbar component" className='rounded-full' src={user.photoURl} />
+               <img alt="Tailwind"   className='rounded-full' src={user.photoURl} />
             </div>
         </> :<>
          <Link to='/login'>   <button className='mx-[10px]'>Login</button></Link>
