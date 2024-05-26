@@ -7,12 +7,17 @@ import { FaGithub } from "react-icons/fa6";
 import { Helmet } from "react-helmet-async";
 import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
+import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+
 
 
 const Register = () => {
+  const axiosPublic= useAxiosPublic()
 
-    const{ user, setUser, createUser, updateUserProfile}= useContext(AuthContext);
+    const{ user, setUser, createUser, updateUserProfile,googleSignIn}= useContext(AuthContext);
     console.log(updateUserProfile);
+   
     const navigate = useNavigate()
 
     const handleRegister =async(e)=>{
@@ -30,13 +35,28 @@ const Register = () => {
 
 
       try{
+        const userInfo={name, email}
 
         const result=await createUser (email,password)
         console.log(result);
         await updateUserProfile(name,photo)
         setUser({...user, photoURL:photo, displayName:name})
-        // toast.success("user resister Create Successfully")
-        navigate(location?.state? location.state :'/')
+
+        axiosPublic.post('/user', userInfo)
+        .then(res=>{
+          if(res.data.insertedId){
+            console.log('user Added successfully');
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "user create successfully",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            navigate(location?.state? location.state :'/')
+          }
+        })
+
 
       }
       catch(error){
@@ -44,6 +64,23 @@ const Register = () => {
         
 
       }
+  }
+
+  const handleGoogleLogin =()=>{
+    googleSignIn()
+    .then(result=>{
+      console.log(result.user);
+      const userInfo={
+        email:result.user?.email,
+        name:result.user?.displayName
+
+      }
+      axiosPublic.post('/user', userInfo)
+      .then(res=>{
+        console.log(res.data);
+        navigate(location?.state? location.state :'/')
+      })
+    })
   }
 
   
@@ -145,7 +182,7 @@ const Register = () => {
     </div>
 
     <div className='flex items-center justify-center mt-[20px] mb-[20px] gap-[16px]'>
-        <button><FcGoogle className='text-3xl' /></button>
+        <button onClick={handleGoogleLogin}><FcGoogle className='text-3xl' /></button>
         <button><FaGithub className='text-3xl' /></button>
         </div>
   </div>

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import loginImg from '../../assets/assets/others/authentication1.png'
-import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
+import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa6";
@@ -8,13 +8,15 @@ import { AuthContext } from '../../Provider/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
 const Login = () => {
   
     const [desabled, setDesabled]= useState(true);
-    const{signIn}=useContext(AuthContext);
+    const{signIn, user, googleSignIn}=useContext(AuthContext);
     const navigate = useNavigate();
     const location= useLocation();
     const from = location.state?.from?.pathname || '/';
+    const axiosPublic= useAxiosPublic()
    
 
     useEffect(()=>{
@@ -67,6 +69,24 @@ const Login = () => {
             setDesabled(true)
           }
     }
+
+
+    const handleGoogleLogin =()=>{
+      googleSignIn()
+      .then(result=>{
+        console.log(result.user);
+        const userInfo={
+          email:result.user?.email,
+          name:result.user?.displayName
+  
+        }
+        axiosPublic.post('/user', userInfo)
+        .then(res=>{
+          console.log(res.data);
+          navigate(location?.state? location.state :'/')
+        })
+      })
+    }
     return (
         <>
 
@@ -113,7 +133,7 @@ const Login = () => {
        
         <p className='font-bold'>Or sign in with</p>
         <div className='flex items-center justify-center mt-[20px] gap-[16px]'>
-        <button><FcGoogle className='text-3xl' /></button>
+        <button onClick={handleGoogleLogin}><FcGoogle className='text-3xl' /></button>
         <button><FaGithub className='text-3xl' /></button>
         </div>
       </div>

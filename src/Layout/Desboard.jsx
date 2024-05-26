@@ -9,16 +9,49 @@ import { LuMenuSquare } from "react-icons/lu";
 import { FaBorderAll } from "react-icons/fa";
 import { IoIosContacts } from "react-icons/io";
 import useCart from "../hooks/useCart";
+import useAdmin from "../hooks/useAdmin";
 
 
 const Desboard = () => {
     const[cart]= useCart();
+    
+    const [isAdmin]= useAdmin();
+    console.log(isAdmin);
     return (
         <div className="flex">
             <div className="w-64 min-h-screen bg-[#D1A054]">
                  <ul className="menu">
+                    {
+                        isAdmin?
+                        
+                        <>
+                          <li className="mb-[16px]">
+                    <NavLink to='/desboard/adminHome'> <IoHome className='text-2xl' />
+                    Admin Home</NavLink>
+                    </li>
+                    <li className="mb-[16px]">
+                    <NavLink to='/desboard/addItem'> <FaCalculator className='text-2xl' />
+                    AddItems</NavLink>
+                    </li>
+                    <li className="mb-[16px]">
+                    <NavLink to='/desboard/manageItem'> <FaAlipay className='text-2xl' />
+                   Manage Items</NavLink>
+                    </li>
+                  <li>
+                    <NavLink to='/desboard/manageBooking'> <FaCartShopping className='text-2xl' />
+                    ManageBooking</NavLink>
+                    </li>
+                    <li className="mb-[16px]">
+                    <NavLink to='/desboard/allUsers'> <MdOutlinePreview className='text-2xl' />
+                    All Users</NavLink>
+                    </li>
 
-                 <li className="mb-[16px]">
+                        </>
+
+                        :
+
+                        <>
+                          <li className="mb-[16px]">
                     <NavLink to='/desboard/userHome'> <IoHome className='text-2xl' />
                     User Home</NavLink>
                     </li>
@@ -43,6 +76,10 @@ const Desboard = () => {
                     <NavLink to='/desboard/booking'> <TbBrandBooking className='text-2xl' />
                     My Booking</NavLink>
                     </li>
+                        </>
+                    }
+
+               
 
                     <hr className="border-2"></hr>
 

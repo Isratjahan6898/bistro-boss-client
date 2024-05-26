@@ -37,7 +37,7 @@ const Navbar = () => {
         user ? <>
                <button onClick={handleLogOut} className='mx-[10px]'>LogOut</button>
                <div title={user.displayName} className="w-10 rounded-full">
-               <img alt="Tailwind"   className='rounded-full' src={user.photoURl} />
+               <img src={user.photoURL}  alt="Tailwind"   className='rounded-full' />
             </div>
         </> :<>
          <Link to='/login'>   <button className='mx-[10px]'>Login</button></Link>

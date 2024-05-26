@@ -12,6 +12,10 @@ import PrivateRoutes from "./PrivateRoutes";
 import Secret from "../Pages/Shared/Secret/Secret";
 import Desboard from "../Layout/Desboard";
 import Cart from "../Pages/Deshboard/Cart/Cart";
+import Allusers from "../Pages/Deshboard/Allusers/Allusers";
+import AddItems from "../Pages/Deshboard/AddItems/AddItems";
+import AdminRoutes from "./AdminRoutes";
+import ManageItem from "../Pages/Deshboard/ManageItem/ManageItem";
 
 
 export  const router = createBrowserRouter([
@@ -29,7 +33,7 @@ export  const router = createBrowserRouter([
         }, 
         {
           path:'/order/:category',
-          element:<Order></Order>
+          element:<PrivateRoutes><Order></Order></PrivateRoutes>
         },
         {
           path:'/login',
@@ -47,12 +51,24 @@ export  const router = createBrowserRouter([
     },
 
     {
-      path:'/desboard',
+      path:'desboard',
       element:<Desboard></Desboard>,
       children:[
         {
-          path:'/desboard/cart',
+          path:'cart',
           element:<Cart></Cart>
+        },
+        {
+          path:'allUsers',
+          element:<AdminRoutes><Allusers></Allusers></AdminRoutes>
+        },
+        {
+          path:'addItem',
+          element:<AdminRoutes><AddItems></AddItems></AdminRoutes>
+        },
+        {
+          path:'manageItem',
+          element:<AdminRoutes><ManageItem></ManageItem></AdminRoutes>
         }
       ]
     }
